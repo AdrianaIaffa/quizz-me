@@ -1,6 +1,9 @@
 // src/index.ts
 import express, { Express, Request, Response } from "express"
 import dotenv from "dotenv"
+import '../config/questions.json'
+import * as fs from 'fs'
+// const filePath = path.join(__dirname, '../config/questions.json')
 
 /*
  * Load up and parse configuration details from
@@ -28,3 +31,10 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)
 });
+
+app.get('/api', (req, res) => {
+ 
+  fs.readFile( __dirname + '/../config/questions.json', 'utf8', function (err, data) {
+    res.end( data );
+ });
+})
