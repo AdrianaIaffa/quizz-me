@@ -1,9 +1,9 @@
 // src/index.ts
 import express, { Express, Request, Response } from "express"
 import dotenv from "dotenv"
-import '../config/questions.json'
+// import router from './routes/routes'
 import * as fs from 'fs'
-// const filePath = path.join(__dirname, '../config/questions.json')
+import * as path from 'path'
 
 /*
  * Load up and parse configuration details from
@@ -19,22 +19,27 @@ dotenv.config();
  */
 const app = express();
 const port = process.env.PORT || 3000
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
-/* Define a route for the root path ("/")
- using the HTTP GET method */
-app.get('/', (req, res) => {
-    res.send('Express + TypeScript Server');
+app.get("/", (req: Request, res: Response) => {
+    res.send("Express + TypeScript Server");
   });
 
-  /* Start the Express app and listen
- for incoming requests on the specified port */
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)
 });
 
-app.get('/api', (req, res) => {
- 
-  fs.readFile( __dirname + '/../config/questions.json', 'utf8', function (err, data) {
-    res.end( data );
- });
+const filePath: string = path.join(__dirname, './config/questions.json')
+
+console.log("filepath:", filePath)
+app.get('/api', (req: Request, res: Response) => {
+    fs.readFile(filePath, 'utf-8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        res.send(data);
+    });
 })
+
