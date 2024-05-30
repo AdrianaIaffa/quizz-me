@@ -1,3 +1,4 @@
+<div style="font-family: Arial, sans-serif; line-height: 1.6; padding: 20px;">
 # Quizz Me!
 
 - [Project Specifications](docs/Project-Overview.md)
