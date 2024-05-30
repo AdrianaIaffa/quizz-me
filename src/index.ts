@@ -1,9 +1,13 @@
 // src/index.ts
 import express, { Express, Request, Response } from "express"
 import dotenv from "dotenv"
-// import router from './routes/routes'
 import * as fs from 'fs'
 import * as path from 'path'
+import * as questionsData from '../src/config/questions.json';
+const filePath: string = path.join(__dirname, '..', 'src', 'config', 'questions.json')
+
+console.log("filepath:", filePath)
+console.log(questionsData.questions)
 
 /*
  * Load up and parse configuration details from
@@ -30,19 +34,7 @@ app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)
 });
 
-const filePath: string = path.join(__dirname, './config/questions.json')
-
-console.log("filepath:", filePath)
-app.get('/api', (req: Request, res: Response) => {
-    fs.readFile(filePath, 'utf-8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        res.send(data);
-    });
-})
-
+//interface
 interface Question {
     id: number;
     category: string;
@@ -54,27 +46,122 @@ interface Question {
     timestamp: string;
 }
 
+//json end point all questions
+app.get('/data.json', (req: Request, res: Response) => {
+    //console.log(questionsData.questions) //this is already an object ❤️
+    res.json(questionsData)
+});
 
-app.get('/api/:id', (req:Request, res: Response) => {
+//json single question
+app.get('/data/:id', (req: Request, res: Response) => {
     const questionId = parseInt(req.params.id);
-        fs.readFile(filePath, 'utf-8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        //this line parses the JSON data from the data variable into a Javascript Object.
-        //The JSON.parse function converts a JSON formatted string into a Javascrupt object. 
-        //after parsing, the resulting object is assign to the variable jsonDataObject
-        const jsonDataObject = JSON.parse(data)
-       // console.log(jsonDataObject)
-        //This line accesses th 'questions property of the jsonDataObject. 
-        //it assumes that the prsed JSON object has a property named 'questions',
-        //which contains an array of objects 
-        const questions: Question[] = jsonDataObject.questions
-        console.log(questions)
-        const question = questions.find((q: any) => q.id === questionId)
-        return res.json(question)
-    });
+    // console.log(typeof questionsData) object ❤️
+    //question|undefined is saying if you find a questions matching the params then use question interface
+    //otherwise it will be undefined, so the type is either one or the other depending on the result
+    const question: Question | undefined = questionsData.questions.find((q: Question) => q.id === questionId)
+    res.json(question)
 })
 
+//json sort by category
+app.get('/data/questions/:category', (req: Request, res: Response) => {
+    const category = req.params.category
+    //console.log("Requested category:", category);
+    //this is saying question is an array of question objects
+    const questions: Question[] = questionsData.questions
+    //console.log("Questions data:", questions);
+    //The filter function uses (question: Question) to indicate each element is a Question object, 
+    //allowing direct access to question.category as a string
+    const categoryFilter = questions.filter((question: Question) => question.category.toLowerCase() === category.toLowerCase())
+    //console.log("Filtered questions:", categoryFilter);
+    res.json(categoryFilter)
+})
+
+//json sort by difficulty
+app.get('/data/questions/:category/:difficulty', (req: Request, res: Response) => {
+    const category = req.params.category;
+    const difficulty = req.params.difficulty;
+    // console.log("Requested category:", category);
+    // console.log("Requested difficulty:", difficulty);
+    const questions: Question[] = questionsData.questions;
+    // console.log("Questions data:", questions);
+    const difficultyFilter = questions.filter(
+        (question: Question) =>
+            question.category.toLowerCase() === category.toLowerCase() &&
+            question.difficulty.toLowerCase() === difficulty.toLowerCase()
+    );
+    // console.log("Filtered questions:", difficultyFilter);
+    res.json(difficultyFilter);
+});
+
+//add new question
+app.post('/data/new', (req: Request, res: Response) => {
+    fs.readFile(filePath, 'utf8', function (err, data) {
+        //console.log(typeof data)
+        //because data in here is actually a string and you have to turn the data into an object
+        //we are doing JSON.parse so the data becomes an object
+        // Parse existing questions from JSON
+        const questions = JSON.parse(data).questions;
+        const newQuestion: Question = {
+            id: generateId(questions),
+            category: req.body.category,
+            difficulty: req.body.difficulty,
+            question: req.body.question,
+            options: req.body.options,
+            answer:req.body.answer,
+            favourited: req.body.favourited,
+            timestamp: new Date().toISOString(),
+        }
+        questions.push(newQuestion)
+        //JSON.stringify creates a new object, so i need to add {}
+        const updateData = JSON.stringify({questions})
+        fs.writeFile(filePath, updateData, 'utf8', function(err){
+            res.status(200).json()
+        })
+
+    })
+
+})
+
+//helper function to set new id when adding a new question, this is for app.post('/data/new')
+function generateId(questions: Question[]) {
+    let counter = 0
+    questions.forEach(question => {
+        counter +=1
+    });
+    return counter +1
+    
+}
+
+//edit single question
+app.put('/data/:id', (req: Request, res: Response) => {
+    const questionId = parseInt(req.params.id);
+    // console.log(typeof questionsData) object ❤️
+    //question|undefined is saying if you find a questions matching the params then use question interface
+    //otherwise it will be undefined, so the type is either one or the other depending on the result
+    const questions: Question[] = questionsData.questions
+    const question = questions.find((q: Question) => q.id === questionId)
+    // res.json(question)
+   if(question){
+    //if you find a question then retrieve the body so you can edit
+    const updatedQuestionData = req.body
+      // set the new data 
+      question.category = updatedQuestionData.category;
+      question.difficulty = updatedQuestionData.difficulty;
+      question.question = updatedQuestionData.question;
+      question.options = updatedQuestionData.options;
+      question.answer = updatedQuestionData.answer;
+      question.favourited = updatedQuestionData.favourited;
+      question.timestamp = updatedQuestionData.timestamp;
+    // once you have updated one question, you need to save the entire questionData again
+      const updateData = JSON.stringify({questions})
+      fs.writeFile(filePath, updateData, 'utf8', (err) => {
+        if (err) {
+            res.status(500).json({ message: 'Failed to update question data' });
+        } else {
+            res.status(200).json({ message: 'Question updated successfully', question });
+        }
+    });
+} else {
+    res.status(404).json({ message: 'Question not found' });
+}
+});
