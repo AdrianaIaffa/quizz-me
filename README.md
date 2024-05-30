@@ -1,6 +1,7 @@
 <div style="font-family: Arial, sans-serif; line-height: 1.6; padding: 20px;">
 
 # Quizz Me!
+[Project 1](https://deploy-preview-952--fac-coursebook.netlify.app/course/syllabus/developer/project-1-server/schedule/)
 
 - [Project Specifications](docs/Project-Overview.md)
 - [Schema](docs/Quizz-API.md)
@@ -8,7 +9,7 @@
 ## Helpful Resources
 - [Node.js TypeScript Express Tutorial](https://blog.logrocket.com/how-to-set-up-node-typescript-express/)
 - [Introduction To Typescript](https://www.youtube.com/watch?v=v4FLgfOSOaw)
-
+- [Typescript Docs Codeacademy](https://www.codecademy.com/resources/docs/typescript)
 ## Prerequisites
 Ensure you have Node.js installed, along with a package manager like npm.
 
