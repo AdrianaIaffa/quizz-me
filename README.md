@@ -7,6 +7,7 @@
 
 ## Helpful Resources
 - [Node.js TypeScript Express Tutorial](https://blog.logrocket.com/how-to-set-up-node-typescript-express/)
+- [Introduction To Typescript](https://www.youtube.com/watch?v=v4FLgfOSOaw)
 
 ## Prerequisites
 Ensure you have Node.js installed, along with a package manager like npm.
