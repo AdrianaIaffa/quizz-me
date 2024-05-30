@@ -7,6 +7,7 @@ import categoryRouter from './routes/categoriesRouter'
 import difficultyRouter from './routes/difficultyRouter';
 import addQuestionsRouter from './routes/addQuestionsRouter'
 import editQuestionRouter from  './routes/editQuestionRouter'
+import deleteQuestionRouter from './routes/deleteQuestionRouter'
 
 /*
  * Load up and parse configuration details from
@@ -39,6 +40,7 @@ app.use('/data/questions', categoryRouter)
 app.use('/data/questions', difficultyRouter);
 app.use('/data', addQuestionsRouter);
 app.use('/data', editQuestionRouter);
+app.use('/data', deleteQuestionRouter)
 
 
 
