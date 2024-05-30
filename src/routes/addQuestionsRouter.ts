@@ -29,7 +29,7 @@ router.post('/new', (req: Request, res: Response) => {
             };
             questions.push(newQuestion);
             //JSON.stringify creates a new object, so i need to add {}
-            const updateData = JSON.stringify({ questions });
+            const updateData = JSON.stringify({ questions }, null, 2);
             fs.writeFile(filePath, updateData, 'utf8', (err) => {
                 if (err) {
                     return res.status(500).json({ message: 'Failed to update question data' });

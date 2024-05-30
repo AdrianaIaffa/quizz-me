@@ -29,7 +29,7 @@ router.put('/:id', (req: Request, res: Response) => {
                 question.favourited = updatedQuestionData.favourited;
                 question.timestamp = new Date().toISOString();
 
-                const updateData = JSON.stringify({ questions });
+                const updateData = JSON.stringify({ questions }, null, 2);
                 fs.writeFile(filePath, updateData, 'utf8', (err) => {
                     if (err) {
                         res.status(500).json({ message: 'Failed to update question data' });

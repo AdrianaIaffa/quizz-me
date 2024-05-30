@@ -30,8 +30,9 @@ router.delete('/:id', (req: Request, res: Response) => {
             // Remove the question from the array
             questions.splice(questionIndex, 1);
 
+            const updateData = JSON.stringify({ questions }, null, 2);
             //update data back to the file
-            fs.writeFile(filePath, JSON.stringify({ questions }), 'utf-8', (err) => {
+            fs.writeFile(filePath, updateData, 'utf-8', (err) => {
                 if (err) {
                     return res.status(500).json({ message: 'Failed to update questions data' });
                 }
