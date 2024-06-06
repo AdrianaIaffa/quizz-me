@@ -11,7 +11,9 @@
 - [Introduction To Typescript](https://www.youtube.com/watch?v=v4FLgfOSOaw)
 - [Typescript Docs Codeacademy](https://www.codecademy.com/resources/docs/typescript)
 - [Randomise an Array](https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/)
-- [Tools, openai](https://platform.openai.com/docs/api-reference/chat/create#chat-create-tools)
+- Don't, this didn't work for me [Tools, openai](https://platform.openai.com/docs/api-reference/chat/create#chat-create-tools)
+- [JSON {} With OpenAI 🤖✨](https://dev.to/mattlewandowski93/json-with-openai-3je9)
+- [JSON mode, Chat Completions, OpenAi](https://platform.openai.com/docs/guides/text-generation/json-mode) 
 ## Prerequisites
 Ensure you have Node.js installed, along with a package manager like npm.
 
