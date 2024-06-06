@@ -9,6 +9,7 @@ import addQuestionsRouter from './routes/addQuestionsRouter'
 import editQuestionRouter from  './routes/editQuestionRouter'
 import deleteQuestionRouter from './routes/deleteQuestionRouter'
 import randomDifficultyRouter from './routes/randomDifficultyRouter'
+import generateQuestionRouter from './routes/generateQuestionRouter'
 
 /*
  * Load up and parse configuration details from
@@ -43,3 +44,4 @@ app.use('/data/level', randomDifficultyRouter)
 app.use('/data', addQuestionsRouter);
 app.use('/data', editQuestionRouter);
 app.use('/data', deleteQuestionRouter)
+app.use('/data', generateQuestionRouter)

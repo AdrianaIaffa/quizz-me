@@ -2,6 +2,7 @@ import express, { Router, Request, Response } from "express";
 import * as fs from 'fs';
 import * as path from 'path';
 import { Question } from '../models/Question';
+import generateId from '../utils/helpers/generateId'
 
 const router: Router = express.Router();
 const filePath: string = path.join(__dirname, '..', '..', 'src', 'config', 'questions.json');
@@ -16,6 +17,7 @@ router.post('/new', (req: Request, res: Response) => {
             //we are doing JSON.parse so the data becomes an object
             // Parse existing questions from JSON
             const questionsData = JSON.parse(data);
+            //console.log(questionsData)
             const questions: Question[] = questionsData.questions;
             const newQuestion: Question = {
                 id: generateId(questions),
@@ -43,13 +45,13 @@ router.post('/new', (req: Request, res: Response) => {
 });
 
 
-//helper function to set new id when adding a new question, this is for app.post('/data/new')
-function generateId(questions: Question[]) {
-    let counter = 0
-    questions.forEach(question => {
-        counter +=1
-    });
-    return counter +1
-}
+// //helper function to set new id when adding a new question, this is for app.post('/data/new')
+// function generateId(questions: Question[]) {
+//     let counter = 0
+//     questions.forEach(question => {
+//         counter +=1
+//     });
+//     return counter +1
+// }
 
 export default router;

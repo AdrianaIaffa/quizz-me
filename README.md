@@ -11,6 +11,7 @@
 - [Introduction To Typescript](https://www.youtube.com/watch?v=v4FLgfOSOaw)
 - [Typescript Docs Codeacademy](https://www.codecademy.com/resources/docs/typescript)
 - [Randomise an Array](https://www.freecodecamp.org/news/how-to-shuffle-an-array-of-items-using-javascript-or-typescript/)
+- [Tools, openai](https://platform.openai.com/docs/api-reference/chat/create#chat-create-tools)
 ## Prerequisites
 Ensure you have Node.js installed, along with a package manager like npm.
 
